@@ -2,9 +2,7 @@ name: GitHub Monitor
 on:
   push:
     branches:
-      - master
-  schedule:
-    - cron: "20 * * * *" #Check every 6 hours
+      - fcre-metstation-data
 jobs:
   GitHub-Monitoring-Actions:
     runs-on: ubuntu-latest
