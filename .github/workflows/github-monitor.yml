@@ -17,7 +17,7 @@ jobs:
         with:
           slack-function: send-message
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
-          slack-channel: C017V6EE0U8
+          slack-channel: C029BRRA6KA
           slack-text: Github Monitoring Test!!!
 
       - name: Send Slack Message Result
