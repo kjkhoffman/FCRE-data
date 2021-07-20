@@ -3,9 +3,23 @@ on:
   push:
     branches:
       - fcre-metstation-data
+  schedule:
+    - cron: "1 * * * *" #Check every 6 hours
 jobs:
   GitHub-Monitoring-Actions:
     runs-on: ubuntu-latest
     steps:
       - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: curl -m 10 --retry 5 https://hc-ping.com/da9a7a40-1311-47d0-92fe-e7bd5d500b83
+      - name: Send Slack Message
+        uses: archive/github-actions-slack@v2.0.0
+        id: send-message
+
+        with:
+          slack-function: send-message
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
+          slack-channel: C017V6EE0U8
+          slack-text: Github Monitoring Test!!!
+
+      - name: Send Slack Message Result
+        run: echo "Data - ${{ steps.send-message.outputs.slack-result }}"
+
