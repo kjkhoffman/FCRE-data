@@ -1,0 +1,13 @@
+name: GitHub Monitor
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "20 * * * *" #Check every 6 hours
+jobs:
+  GitHub-Monitoring-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: curl -fsS -m 10 --retry 5 -o /dev/null https://hc-ping.com/da9a7a40-1311-47d0-92fe-e7bd5d500b83
