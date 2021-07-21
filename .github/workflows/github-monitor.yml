@@ -6,10 +6,25 @@ on:
   schedule:
     - cron: "20 */6 * * *" #Check every 6 hours
 jobs:
-  GitHub-Monitoring-Actions:
+  Commit-Time-Calculation:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
+      env:
+        SEND_MESSAGE: False
+      run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
+      run: LAST_COMMIT=$(curl https://api.github.com/repos/FLARE-forecast/FCRE-data/commits/${fcre-metstation-data} 2>&1 | grep '"date"' | tail -n 1 | sed 's/.*\ //' | sed -e 's/^"//' -e 's/"$//')
+      run: echo $LAST_COMMIT
+      run: LAST_COMMIT_EPOCH=$(date "+%s" -d ${LAST_COMMIT})
+      run: echo $LAST_COMMIT_EPOCH
+      run: MINUTES_FROM_LAST_COMMIT=$(($((${CURRENT_TIME} - ${LAST_COMMIT_EPOCH})) / 60))
+      run: MAXIMUM_WINDOW=$((${GIT_UPDATE_PERIOD} + ${UPDATE_GRACE_TIME}))
+      run: [[ ${MINUTES_FROM_LAST_COMMIT} -lt ${MAXIMUM_WINDOW} ]] && SEND_MESSAGE = 'True'
+      run: echo $SEND_MESSAGE
+  Send-Up-Messages-Actions:
+    needs: Commit-Time-Calculation
+    if: SEND_MESSAGE == 'True'
+    runs-on: ubuntu-latest
+    steps:
       - name: Send Slack Message
         uses: archive/github-actions-slack@v2.0.0
         id: send-message
@@ -18,7 +33,25 @@ jobs:
           slack-function: send-message
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
           slack-channel: C029BRRA6KA
-          slack-text: Github Monitoring Test!
+          slack-text: Up!
+
+      - name: Send Slack Message Result
+        run: echo "Data - ${{ steps.send-message.outputs.slack-result }}"
+
+  Send-Down-Messages-Actions:
+    needs: Commit-Time-Calculation
+    if: SEND_MESSAGE == 'False'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Slack Message
+        uses: archive/github-actions-slack@v2.0.0
+        id: send-message
+
+        with:
+          slack-function: send-message
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
+          slack-channel: C029BRRA6KA
+          slack-text: Down!
 
       - name: Send Slack Message Result
         run: echo "Data - ${{ steps.send-message.outputs.slack-result }}"
