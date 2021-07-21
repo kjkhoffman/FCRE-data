@@ -13,6 +13,7 @@ jobs:
         SEND_MESSAGE: False
         MAXIMUM_WINDOW: 380
       run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
+      run: CURRENT_TIME=$(date +%s)
       run: LAST_COMMIT=$(curl https://api.github.com/repos/FLARE-forecast/FCRE-data/commits/${fcre-metstation-data} 2>&1 | grep '"date"' | tail -n 1 | sed 's/.*\ //' | sed -e 's/^"//' -e 's/"$//')
       run: echo $LAST_COMMIT
       run: LAST_COMMIT_EPOCH=$(date "+%s" -d ${LAST_COMMIT})
