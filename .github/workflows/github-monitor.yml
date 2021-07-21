@@ -17,7 +17,7 @@ jobs:
       run: LAST_COMMIT_EPOCH=$(date "+%s" -d ${LAST_COMMIT})
       run: echo $LAST_COMMIT_EPOCH
       run: MINUTES_FROM_LAST_COMMIT=$(($((${CURRENT_TIME} - ${LAST_COMMIT_EPOCH})) / 60))
-      run: MAXIMUM_WINDOW=$((${GIT_UPDATE_PERIOD} + ${UPDATE_GRACE_TIME}))
+      run: MAXIMUM_WINDOW= 380
       run: [[ ${MINUTES_FROM_LAST_COMMIT} -lt ${MAXIMUM_WINDOW} ]] && SEND_MESSAGE = 'True'
       run: echo $SEND_MESSAGE
   Send-Up-Messages-Actions:
