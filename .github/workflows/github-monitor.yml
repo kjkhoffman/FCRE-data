@@ -24,7 +24,6 @@ jobs:
   
   Send-Up-Messages-Actions:
     needs: Commit-Time-Calculation
-    if: SEND_MESSAGE == 'True'
     runs-on: ubuntu-latest
     steps:
       - name: Send Slack Message
@@ -42,7 +41,6 @@ jobs:
 
   Send-Down-Messages-Actions:
     needs: Commit-Time-Calculation
-    if: SEND_MESSAGE == 'False'
     runs-on: ubuntu-latest
     steps:
       - name: Send Slack Message
