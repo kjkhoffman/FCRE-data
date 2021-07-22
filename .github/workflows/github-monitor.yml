@@ -5,13 +5,14 @@ on:
       - fcre-metstation-data
   schedule:
     - cron: "* * * * *" #Check every 6 hours
+env:
+  SEND_MESSAGE: False
 jobs:
   Commit-Time-Calculation:
     runs-on: ubuntu-latest
     steps:
       - name: Calculation
         env:
-          SEND_MESSAGE: False
           MAXIMUM_WINDOW: 380
         run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
              CURRENT_TIME=$(date +%s)
@@ -20,12 +21,12 @@ jobs:
              LAST_COMMIT_EPOCH=$(date "+%s" -d ${LAST_COMMIT})
              echo $LAST_COMMIT_EPOCH
              MINUTES_FROM_LAST_COMMIT=$(($((${CURRENT_TIME} - ${LAST_COMMIT_EPOCH})) / 60))
-             [[ ${MINUTES_FROM_LAST_COMMIT} -lt ${MAXIMUM_WINDOW} ]] && SEND_MESSAGE = 'True'
+             [[ ${MINUTES_FROM_LAST_COMMIT} -lt ${MAXIMUM_WINDOW} ]] && ${{env.SEND_MESSAGE}} = 'True'
              echo $SEND_MESSAGE
   
   Send-Up-Messages-Actions:
     needs: Commit-Time-Calculation
-    if: SEND_MESSAGE == 'True'
+    if: ${{env.SEND_MESSAGE}} == 'True'
     runs-on: ubuntu-latest
     steps:
       - name: Send Slack Message
@@ -43,7 +44,7 @@ jobs:
 
   Send-Down-Messages-Actions:
     needs: Commit-Time-Calculation
-    if: SEND_MESSAGE == 'False'
+    if: ${{env.SEND_MESSAGE}} == 'False'
     runs-on: ubuntu-latest
     steps:
       - name: Send Slack Message
