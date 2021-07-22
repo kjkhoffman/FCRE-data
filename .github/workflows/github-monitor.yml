@@ -18,7 +18,7 @@ jobs:
       run: echo $LAST_COMMIT
       run: LAST_COMMIT_EPOCH=$(date "+%s" -d ${LAST_COMMIT})
       run: echo $LAST_COMMIT_EPOCH
-      run: MINUTES_FROM_LAST_COMMIT= ${CURRENT_TIME} - ${LAST_COMMIT_EPOCH}
+      run: MINUTES_FROM_LAST_COMMIT= $(${CURRENT_TIME} - ${LAST_COMMIT_EPOCH})
       run: [[ ${MINUTES_FROM_LAST_COMMIT} -lt ${MAXIMUM_WINDOW} ]] && SEND_MESSAGE = 'True'
       run: echo $SEND_MESSAGE
   
