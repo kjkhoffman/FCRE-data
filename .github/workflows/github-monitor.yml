@@ -12,7 +12,7 @@ jobs:
       - name: Checkout with maximum fetch depth
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          fetch-depth: 2
       - name: Run CommitsWithinTime script
         uses: AlexHolderDeveloper/CommitsWithinTime@v1.1.5
         id: commitswithintime
