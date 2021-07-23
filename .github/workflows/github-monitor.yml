@@ -8,11 +8,11 @@ on:
 jobs:
   Github-monitoring:
     runs-on: ubuntu-latest
+    env:
+      SEND_SLACK_MESSAGE: False
+      MAXIMUM_WINDOW: 380
     steps:
       - name: Commit Time Calculation
-        env:
-          SEND_SLACK_MESSAGE: False
-          MAXIMUM_WINDOW: 380
         run: 
           echo "The job was automatically triggered by a ${{ github.event_name }} event."
           CURRENT_TIME=$(date +%s)
