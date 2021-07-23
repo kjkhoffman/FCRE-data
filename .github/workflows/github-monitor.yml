@@ -12,7 +12,7 @@ jobs:
       - name: Checkout with maximum fetch depth
         uses: actions/checkout@v2
         with:
-          fetch-depth: 2
+          fetch-depth: 1
       - name: Run CommitsWithinTime script
         uses: AlexHolderDeveloper/CommitsWithinTime@v1.1.5
         id: commitswithintime
@@ -26,7 +26,7 @@ jobs:
           echo "The 'total-commits' value is ${{ steps.commitswithintime.outputs.total-commits }}"
 
       - name: Send Slack Message Down
-        if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time }} == 'False'
+        if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time == 'False' }}
         uses: archive/github-actions-slack@v2.0.0
         id: send-message
 
@@ -35,20 +35,6 @@ jobs:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
           slack-channel: C029BRRA6KA
           slack-text: Down!
-
-      - name: Send Slack Message Result
-        run: echo "Data - ${{ steps.send-message.outputs.slack-result }}"
-        
-      - name: Send Slack Message Up
-        if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time }} == 'True'
-        uses: archive/github-actions-slack@v2.0.0
-        id: send-message
-
-        with:
-          slack-function: send-message
-          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
-          slack-channel: C029BRRA6KA
-          slack-text: Up!
 
       - name: Send Slack Message Result
         run: echo "Data - ${{ steps.send-message.outputs.slack-result }}"
