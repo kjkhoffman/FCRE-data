@@ -4,50 +4,27 @@ on:
     branches:
       - fcre-metstation-data
   schedule:
-    - cron: "* */6 * * *" #Check every 6 hours
-env:
-  SEND_MESSAGE: False
+    - cron: "* * * * *" #Check every 6 hours
 jobs:
-  Commit-Time-Calculation:
+  Github monitoring:
     runs-on: ubuntu-latest
     steps:
-      - name: Calculation
+      - name: Commit Time Calculation
         env:
+          SEND_SLACK_MESSAGE: False
           MAXIMUM_WINDOW: 380
         run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
-             CURRENT_TIME=$(date +%s)
-             LAST_COMMIT=$(curl https://api.github.com/repos/FLARE-forecast/FCRE-data/commits/${fcre-metstation-data} 2>&1 | grep '"date"' | tail -n 1 | sed 's/.*\ //' | sed -e 's/^"//' -e 's/"$//')
-             echo $LAST_COMMIT
-             LAST_COMMIT_EPOCH=$(date "+%s" -d ${LAST_COMMIT})
-             echo $LAST_COMMIT_EPOCH
-             MINUTES_FROM_LAST_COMMIT=$(($((${CURRENT_TIME} - ${LAST_COMMIT_EPOCH})) / 60))
-             [[ ${MINUTES_FROM_LAST_COMMIT} -lt ${MAXIMUM_WINDOW} ]] && ${{env.SEND_MESSAGE}} = 'True'
-             echo $SEND_MESSAGE
-  
-  Send-Up-Messages-Actions:
-    needs: Commit-Time-Calculation
-    if: ${{env.SEND_MESSAGE}} == 'True'
-    runs-on: ubuntu-latest
-    steps:
+        run: CURRENT_TIME=$(date +%s)
+        run: LAST_COMMIT=$(curl https://api.github.com/repos/FLARE-forecast/FCRE-data/commits/${fcre-metstation-data} 2>&1 | grep '"date"' | tail -n 1 | sed 's/.*\ //' | sed -e 's/^"//' -e 's/"$//')
+        run: echo $LAST_COMMIT
+        run: LAST_COMMIT_EPOCH=$(date "+%s" -d ${LAST_COMMIT})
+        run: echo $LAST_COMMIT_EPOCH
+        run: MINUTES_FROM_LAST_COMMIT=$(($((${CURRENT_TIME} - ${LAST_COMMIT_EPOCH})) / 60))
+        run: [[ ${MINUTES_FROM_LAST_COMMIT} -lt ${MAXIMUM_WINDOW} ]] && SEND_SLACK_MESSAGE = 'True'
+        run: echo $SEND_MESSAGE
+
       - name: Send Slack Message
-        uses: archive/github-actions-slack@v2.0.0
-        id: send-message
-
-        with:
-          slack-function: send-message
-          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
-          slack-channel: C029BRRA6KA
-          slack-text: Up!
-
-      - name: Send Slack Message Result
-        run: echo "Data - ${{ steps.send-message.outputs.slack-result }}"
-
-  Send-Down-Messages-Actions:
-    needs: Commit-Time-Calculation
-    if: ${{env.SEND_MESSAGE}} == 'False'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Send Slack Message
+        if: SEND_SLACK_MESSAGE == 'False'
         uses: archive/github-actions-slack@v2.0.0
         id: send-message
 
