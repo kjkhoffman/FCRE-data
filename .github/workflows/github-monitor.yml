@@ -6,7 +6,7 @@ on:
   schedule:
     - cron: "* * * * *" #Check every 6 hours
 jobs:
-  Github monitoring:
+  Github-monitoring:
     runs-on: ubuntu-latest
     steps:
       - name: Commit Time Calculation
