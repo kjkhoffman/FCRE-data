@@ -4,7 +4,7 @@ on:
     branches:
       - fcre-metstation-data
   schedule:
-    - cron: "* */6 * * *" #Check every 6 hours
+    - cron: "* * * * *" #Check every 6 hours
 jobs:
   Github-monitoring:
     runs-on: ubuntu-latest
@@ -12,6 +12,7 @@ jobs:
       - name: Checkout with maximum fetch depth
         uses: actions/checkout@v2
         with:
+          ref: fcre-metstation-data
           fetch-depth: 1
       - name: Run CommitsWithinTime script
         uses: AlexHolderDeveloper/CommitsWithinTime@v1.1.5
