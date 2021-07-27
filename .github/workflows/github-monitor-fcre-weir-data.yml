@@ -1,0 +1,34 @@
+name: GitHub Monitor fcre-weir-data
+on:
+  schedule:
+    - cron: "* */1 * * *" #Check every 6 hours
+jobs:
+  Github-monitoring:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout with maximum fetch depth
+        uses: actions/checkout@v2
+        with:
+          ref: fcre-weir-data
+          fetch-depth: 1
+      - name: Run CommitsWithinTime script
+        uses: AlexHolderDeveloper/CommitsWithinTime@v1.1.5
+        id: commitswithintime
+        with:
+          hours: 1
+      # Use the output from the `commitswithintime` step
+      - name: Get the output from CommitsWithinTime
+        run: |
+          echo "The 'has-new-commits-within-time' value is ${{ steps.commitswithintime.outputs.has-new-commits-within-time }}"
+          echo "The 'number-of-commits-within-time' value is ${{ steps.commitswithintime.outputs.number-of-commits-within-time }}"
+          echo "The 'total-commits' value is ${{ steps.commitswithintime.outputs.total-commits }}"
+      - name: Send Slack Message Down
+        if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time == 'False' }}
+        uses: archive/github-actions-slack@v2.0.0
+        id: send-message
+
+        with:
+          slack-function: send-message
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
+          slack-channel: C029BRRA6KA
+          slack-text: FCRE-data/fcre-weir-data is Down!
