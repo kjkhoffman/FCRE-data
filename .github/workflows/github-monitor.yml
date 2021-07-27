@@ -1,10 +1,7 @@
 name: GitHub Monitor
 on:
-  push:
-    branches:
-      - fcre-metstation-data
   schedule:
-    - cron: "* */6 * * *" #Check every 6 hours
+    - cron: "* * * * *" #Check every 6 hours
 jobs:
   Github-monitoring:
     runs-on: ubuntu-latest
@@ -35,8 +32,5 @@ jobs:
           slack-function: send-message
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
           slack-channel: C029BRRA6KA
-          slack-text: Down!
-
-      - name: Send Slack Message Result
-        run: echo "Data - ${{ steps.send-message.outputs.slack-result }}"
+          slack-text: FCRE-data/fcre-metstation-data is Down!
 
