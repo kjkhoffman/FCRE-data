@@ -32,7 +32,7 @@ jobs:
       - name: Write package.json
         uses: joutvhu/write-file@v1
         with:
-          path: ./package.json
+          path: ${{ github.workplace }}/package.json
           contents: |
             ${{ steps.commitswithintime.outputs.has-new-commits-within-time }}
           write_mode: overwrite
