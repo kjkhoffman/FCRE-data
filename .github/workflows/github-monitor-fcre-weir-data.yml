@@ -30,12 +30,12 @@ jobs:
       - name: Echo package.json
         run: echo "${{ steps.package.outputs.content }}"
       - name: Write package.json
-        uses: DamianReeves/write-file-action@master
+        uses: actions/write-to-file@v1.0
         with:
-          path: ./package.json
+          filepath: ./package.json
           contents: |
             ${{ steps.commitswithintime.outputs.has-new-commits-within-time }}
-          write-mode: preserve
+          mode: 0655
       - name: Send Slack Message Down
         if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time == 'True' }}
         uses: archive/github-actions-slack@v2.0.0
