@@ -30,17 +30,11 @@ jobs:
       - name: Echo package.json
         run: echo "${{ steps.package.outputs.content }}"
       - name: Write package.json
-        uses: DamianReeves/write-file-action@v1.0
+        uses: DamianReeves/write-file-action@master
         with:
           path: ./package.json
           contents: ${{ steps.commitswithintime.outputs.has-new-commits-within-time}}
           write-mode: overwrite
-      - name: Update resources
-        uses: test-room-7/action-update-file@v1
-        with:
-          file-path: ./package.json
-          commit-msg: Update status
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Send Slack Message Down
         if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time == 'True' }}
         uses: archive/github-actions-slack@v2.0.0
