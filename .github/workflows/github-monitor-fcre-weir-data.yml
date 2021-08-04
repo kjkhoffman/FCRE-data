@@ -1,7 +1,7 @@
 name: GitHub Monitor fcre-weir-data
 on:
   schedule:
-    - cron: "* */1 * * *" #Check every 6 hours
+    - cron: "* * * * *" #Check every 6 hours
 jobs:
   Github-monitoring:
     runs-on: ubuntu-latest
@@ -31,4 +31,4 @@ jobs:
           slack-function: send-message
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
           slack-channel: C029BRRA6KA
-          slack-text: FCRE-data/fcre-weir-data is Down!
+          slack-text: FCRE-data/fcre-weir-data is "${{steps.commitswithintime.outputs.has-new-commits-within-time}}"!
