@@ -24,7 +24,7 @@ jobs:
           echo "The 'total-commits' value is ${{ steps.commitswithintime.outputs.total-commits }}"
       - name: Read package.json
         id: package
-        uses: juliangruber/read-file-action@master
+        uses: juliangruber/read-file-action@v1
         with:
           path: ./package.json
       - name: Echo package.json
@@ -35,7 +35,7 @@ jobs:
           path: ./package.json
           contents: |
             ${{ steps.commitswithintime.outputs.has-new-commits-within-time }}
-          write-mode: overwrite
+          write-mode: append
       - name: Send Slack Message Down
         if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time == 'True' }}
         uses: archive/github-actions-slack@v2.0.0
