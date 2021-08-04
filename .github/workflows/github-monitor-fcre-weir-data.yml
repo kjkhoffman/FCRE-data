@@ -30,7 +30,7 @@ jobs:
       - name: Echo package.json
         run: echo "${{ steps.package.outputs.content }}"
       - name: Write package.json
-        uses: actions/write-to-file@v1.0
+        uses: actions/write-to-file@v1.3
         with:
           filepath: ./package.json
           contents: |
