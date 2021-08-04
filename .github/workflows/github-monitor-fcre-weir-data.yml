@@ -33,11 +33,10 @@ jobs:
         uses: DamianReeves/write-file-action@v1.0
         with:
           path: ./package.json
-          contents: |
-            echo "Hello World!"
+          contents: Hello World!
           write-mode: overwrite
       - name: Send Slack Message Down
-        if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time == 'False' }}
+        if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time == 'True' }}
         uses: archive/github-actions-slack@v2.0.0
         id: send-message
 
