@@ -33,7 +33,7 @@ jobs:
         uses: frdrwrt/write-to-file@v1.3
         with:
           filepath: ./package.json
-          contents: |
+          content: |
             ${{ steps.commitswithintime.outputs.has-new-commits-within-time }}
           mode: 0600
       - name: Send Slack Message Down
