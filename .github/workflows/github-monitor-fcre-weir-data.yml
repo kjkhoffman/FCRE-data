@@ -24,7 +24,7 @@ jobs:
           echo "The 'total-commits' value is ${{ steps.commitswithintime.outputs.total-commits }}"
       - name: Read package.json
         id: package
-        uses: juliangruber/read-file-action@v1
+        uses: juliangruber/read-file-action@master
         with:
           path: ./package.json
       - name: Echo package.json
