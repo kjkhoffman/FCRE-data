@@ -45,6 +45,8 @@ jobs:
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: github-monitor-fcre-weir-data.yml
+          pr: ${{github.event.pull_request.number}}
+          branch: master
           name: status
           path: ./package.json
       - name: Send Slack Message Down
