@@ -35,7 +35,7 @@ jobs:
           path: ./package.json
           contents: |
             ${{ steps.commitswithintime.outputs.has-new-commits-within-time }}
-          write-mode: append
+          write-mode: preserve
       - name: Send Slack Message Down
         if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time == 'True' }}
         uses: archive/github-actions-slack@v2.0.0
