@@ -46,7 +46,6 @@ jobs:
         with:
           workflow: github-monitor-fcre-weir-data.yml
           workflow_conclusion: success
-          branch: fcre-weir-data
           name: status
           path: ./package.json
       - name: Send Slack Message Down
