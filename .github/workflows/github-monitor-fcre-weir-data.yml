@@ -59,5 +59,4 @@ jobs:
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: github-monitor-fcre-weir-data.yml
-          name: status
           path: ./package.json
