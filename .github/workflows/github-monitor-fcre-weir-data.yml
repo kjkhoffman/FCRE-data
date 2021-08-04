@@ -36,6 +36,19 @@ jobs:
           contents: |
             ${{ steps.commitswithintime.outputs.has-new-commits-within-time }}
           write_mode: overwrite
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: status
+          path: ./package.json
+      - name: Download artifact and commit to repo
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: github-monitor-fcre-weir-data.yml
+          workflow_conclusion: success
+          branch: fcre-weir-data
+          name: status
+          path: ./package.json
       - name: Send Slack Message Down
         if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time == 'True' }}
         uses: archive/github-actions-slack@v2.0.0
