@@ -32,10 +32,14 @@ jobs:
       - name: Write package.json
         uses: joutvhu/write-file@v1
         with:
-          path: ${{ github.workplace }}/package.json
+          path: ./package.json
           contents: |
             ${{ steps.commitswithintime.outputs.has-new-commits-within-time }}
           write_mode: overwrite
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          path: ./package.json
       - name: Send Slack Message Down
         if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time == 'True' }}
         uses: archive/github-actions-slack@v2.0.0
