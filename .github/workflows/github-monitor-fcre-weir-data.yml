@@ -1,10 +1,12 @@
 name: GitHub Monitor fcre-weir-data
 on:
   schedule:
-    - cron: "* * * * *" #Check every 6 hours
+    - cron: "0 */1 * * *" #Check every 6 hours
 jobs:
   Github-monitoring:
     runs-on: ubuntu-latest
+    env:
+      status: None
     steps:
       - name: Checkout with maximum fetch depth
         uses: actions/checkout@v2
@@ -22,6 +24,9 @@ jobs:
           echo "The 'has-new-commits-within-time' value is ${{ steps.commitswithintime.outputs.has-new-commits-within-time }}"
           echo "The 'number-of-commits-within-time' value is ${{ steps.commitswithintime.outputs.number-of-commits-within-time }}"
           echo "The 'total-commits' value is ${{ steps.commitswithintime.outputs.total-commits }}"
+          if [[ ${{ steps.commitswithintime.outputs.has-new-commits-within-time }} = "true" ]];then ${{ env.status }} = 'Up'
+          if [[ ${{ steps.commitswithintime.outputs.has-new-commits-within-time }} = "true" ]];then ${{ env.status }} = 'Down'
+          echo "${{ env.status }}
       - name: Read package.json
         id: package
         uses: juliangruber/read-file-action@v1
@@ -30,7 +35,7 @@ jobs:
       - name: Echo package.json
         run: echo "${{ steps.package.outputs.content }}"
       - name: Send Slack Message
-        if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time != steps.package.outputs.content }}
+        if: ${{ env.status != steps.package.outputs.content }}
         uses: archive/github-actions-slack@v2.0.0
         id: send-message
 
