@@ -25,11 +25,11 @@ jobs:
       - name: Set server status to Up
         if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time == 'true' }}
         run:
-          echo "::set-env name=status::Up"
+          echo "status=Up" >> $GITHUB_ENV
       - name: Set server status to Down
         if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time == 'false' }}
         run:
-          echo "::set-env name=status::Down" 
+          echo "status=Down" >> $GITHUB_ENV
       - name: Read package.json
         id: package
         uses: juliangruber/read-file-action@v1
