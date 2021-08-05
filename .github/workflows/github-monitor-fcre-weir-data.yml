@@ -39,9 +39,20 @@ jobs:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
           slack-channel: C029BRRA6KA
           slack-text: FCRE-data/fcre-weir-data is "${{ steps.commitswithintime.outputs.has-new-commits-within-time }}"!
-      - name: Find and Replace
-        uses: jacobtomlinson/gha-find-replace@master
+      - uses: joutvhu/write-file@v1
         with:
-          find: "."
-          replace: "${{ steps.commitswithintime.outputs.has-new-commits-within-time }}"
-          include: "package.json" # Will match all README.md files in any nested directory
+          path: ./package.json
+          contents: ${{ steps.commitswithintime.outputs.has-new-commits-within-time }}
+          write_mode: overwrite
+      - name: build
+        uses: github-actions-x/hugo@master
+      - name: push
+        uses: github-actions-x/commit@v2.8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          push-branch: 'fcre-weir-data'
+          commit-message: 'Update Status'
+          force-add: 'true'
+          files: ./package.json
+          name: Yun-Jung
+          email: rebecca86420@gmail.com
