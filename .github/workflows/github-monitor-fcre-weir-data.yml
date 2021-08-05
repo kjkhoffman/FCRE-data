@@ -44,7 +44,7 @@ jobs:
       - name: Show output
         run: echo "${{ env.action_status }}"
       - name: Send Slack Message
-        if: ${{ env.status != steps.package.outputs.content }}
+        if: ${{ env.status != env.action_status }}
         uses: archive/github-actions-slack@v2.0.0
         id: send-message
 
