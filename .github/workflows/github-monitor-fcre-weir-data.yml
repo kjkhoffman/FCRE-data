@@ -1,12 +1,12 @@
 name: GitHub Monitor fcre-weir-data
 on:
   schedule:
-    - cron: "0 */1 * * *" #Check every 6 hours
+    - cron: "* * * * *" #Check every 6 hours
 jobs:
   Github-monitoring:
     runs-on: ubuntu-latest
     env:
-      status: None
+      status: Down
     steps:
       - name: Checkout with maximum fetch depth
         uses: actions/checkout@v2
@@ -24,9 +24,10 @@ jobs:
           echo "The 'has-new-commits-within-time' value is ${{ steps.commitswithintime.outputs.has-new-commits-within-time }}"
           echo "The 'number-of-commits-within-time' value is ${{ steps.commitswithintime.outputs.number-of-commits-within-time }}"
           echo "The 'total-commits' value is ${{ steps.commitswithintime.outputs.total-commits }}"
-          if [[ ${{ steps.commitswithintime.outputs.has-new-commits-within-time }} = "true" ]];then ${{ env.status }} = 'Up'
-          if [[ ${{ steps.commitswithintime.outputs.has-new-commits-within-time }} = "true" ]];then ${{ env.status }} = 'Down'
-          echo "${{ env.status }}
+      - name: Check server status
+        if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time == 'true' }}
+        run:
+          ${{ env.status }} = 'Up' 
       - name: Read package.json
         id: package
         uses: juliangruber/read-file-action@v1
