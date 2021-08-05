@@ -42,9 +42,9 @@ jobs:
         with:
           path: ./fcre-weir-data-action-status.json
       - name: Echo package.json
-        run: echo "${{ steps.package.outputs.content[0] }}"
+        run: echo ${{ steps.package.outputs.content }}
       - name: Send Slack Message
-        if: ${{ env.status != steps.package.outputs.content[0] }}
+        if: ${{ env.status != steps.package.outputs.content }}
         uses: archive/github-actions-slack@v2.0.0
         id: send-message
 
