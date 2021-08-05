@@ -29,13 +29,6 @@ jobs:
           path: ./package.json
       - name: Echo package.json
         run: echo "${{ steps.package.outputs.content }}"
-      - name: Write package.json
-        uses: joutvhu/write-file@v1
-        with:
-          path: ./package.json
-          contents: |
-            ${{ steps.commitswithintime.outputs.has-new-commits-within-time }}
-          write_mode: overwrite
       - name: Send Slack Message Down
         if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time == 'True' }}
         uses: archive/github-actions-slack@v2.0.0
@@ -46,3 +39,9 @@ jobs:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
           slack-channel: C029BRRA6KA
           slack-text: FCRE-data/fcre-weir-data is "${{ steps.commitswithintime.outputs.has-new-commits-within-time }}"!
+      - name: Find and Replace
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "*"
+          replace: "${{ steps.commitswithintime.outputs.has-new-commits-within-time }}"
+          include: "package.json" # Will match all README.md files in any nested directory
