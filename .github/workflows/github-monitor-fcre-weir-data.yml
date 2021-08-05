@@ -44,14 +44,12 @@ jobs:
           slack-function: send-message
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
           slack-channel: C029BRRA6KA
-          slack-text: FCRE-data/fcre-weir-data is "${{ steps.commitswithintime.outputs.has-new-commits-within-time }}"!
+          slack-text: FCRE-data/fcre-weir-data is "${{ env.status }}"!
       - uses: joutvhu/write-file@v1
         with:
           path: ./package.json
-          contents: ${{ steps.commitswithintime.outputs.has-new-commits-within-time }}
+          contents: ${{ env.status }}
           write_mode: overwrite
-      - name: git status
-        run: git status
       - name: Commit files
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
