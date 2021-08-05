@@ -29,8 +29,8 @@ jobs:
           path: ./package.json
       - name: Echo package.json
         run: echo "${{ steps.package.outputs.content }}"
-      - name: Send Slack Message Down
-        if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time == 'True' }}
+      - name: Send Slack Message
+        if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time != steps.package.outputs.content }}
         uses: archive/github-actions-slack@v2.0.0
         id: send-message
 
