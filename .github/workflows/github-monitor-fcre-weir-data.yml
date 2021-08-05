@@ -64,8 +64,6 @@ jobs:
           path: ./fcre-weir-data-action-status.json
           contents: |
             ${{ env.status }}
-            
-            
             ${{ steps.time.outputs.time }}
           write_mode: overwrite
       - name: Commit files
