@@ -22,10 +22,14 @@ jobs:
           echo "The 'has-new-commits-within-time' value is ${{ steps.commitswithintime.outputs.has-new-commits-within-time }}"
           echo "The 'number-of-commits-within-time' value is ${{ steps.commitswithintime.outputs.number-of-commits-within-time }}"
           echo "The 'total-commits' value is ${{ steps.commitswithintime.outputs.total-commits }}"
-      - name: Check server status
+      - name: Set server status to Up
         if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time == 'true' }}
         run:
-          echo "::set-env name=status::Up" 
+          echo "::set-env name=status::Up"
+      - name: Set server status to Down
+        if: ${{ steps.commitswithintime.outputs.has-new-commits-within-time == 'false' }}
+        run:
+          echo "::set-env name=status::Down" 
       - name: Read package.json
         id: package
         uses: juliangruber/read-file-action@v1
