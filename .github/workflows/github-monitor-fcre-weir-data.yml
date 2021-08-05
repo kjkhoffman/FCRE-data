@@ -42,6 +42,6 @@ jobs:
       - name: Find and Replace
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          find: "*"
+          find: "."
           replace: "${{ steps.commitswithintime.outputs.has-new-commits-within-time }}"
           include: "package.json" # Will match all README.md files in any nested directory
