@@ -36,13 +36,13 @@ jobs:
         with:
           ref: master
           fetch-depth: 1
-      - name: Read package.json
-        id: package
-        uses: juliangruber/read-file-action@v1
+      - name: JSON to variables
+        uses: antifree/json-to-variables@v1.0.1
         with:
-          path: ./fcre-weir-data-action-status.json
-      - name: Echo package.json
-        run: echo "${{ steps.package.outputs.content }}"
+          filename: 'fcre-weir-data-action-status.json'
+          prefix: action
+      - name: Show output
+        run: echo "${{ env.action_status }}"
       - name: Send Slack Message
         if: ${{ env.status != steps.package.outputs.content }}
         uses: archive/github-actions-slack@v2.0.0
@@ -63,8 +63,10 @@ jobs:
         with:
           path: ./fcre-weir-data-action-status.json
           contents: |
-            ${{ env.status }}
-            ${{ steps.time.outputs.time }}
+            {
+                "status": "${{ env.status }}",
+                "Timestamp": "${{ steps.time.outputs.time }}"
+            }
           write_mode: overwrite
       - name: Commit files
         run: |
