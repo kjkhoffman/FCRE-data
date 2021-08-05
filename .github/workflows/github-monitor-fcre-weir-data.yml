@@ -46,15 +46,13 @@ jobs:
           write_mode: overwrite
       - name: git status
         run: git status
-      - name: build
-        uses: github-actions-x/hugo@master
-      - name: push
-        uses: github-actions-x/commit@v2.8
+      - name: Commit files
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "Update Status" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@master
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          push-branch: 'fcre-weir-data'
-          commit-message: 'Update Status'
-          force-add: 'true'
-          files: ./package.json
-          name: Yun-Jung
-          email: rebecca86420@gmail.com
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
