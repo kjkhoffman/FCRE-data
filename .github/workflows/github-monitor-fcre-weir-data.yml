@@ -1,7 +1,7 @@
 name: GitHub Monitor fcre-weir-data
 on:
   schedule:
-    - cron: "0 */1 * * *" #Check every 6 hours
+    - cron: "* * * * *" #Check every 6 hours
 jobs:
   Github-monitoring:
     runs-on: ubuntu-latest
@@ -42,9 +42,9 @@ jobs:
         with:
           path: ./fcre-weir-data-action-status.json
       - name: Echo package.json
-        run: echo "${{ steps.package.outputs.content }}"
+        run: echo "${{ steps.package.outputs.content[0] }}"
       - name: Send Slack Message
-        if: ${{ env.status != steps.package.outputs.content }}
+        if: ${{ env.status != steps.package.outputs.content[0] }}
         uses: archive/github-actions-slack@v2.0.0
         id: send-message
 
@@ -53,10 +53,20 @@ jobs:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
           slack-channel: C029BRRA6KA
           slack-text: FCRE-data/fcre-weir-data is "${{ env.status }}"!
+      - name: Get Time
+        id: time
+        uses: nanzm/get-time-action@v1.1
+        with:
+          timeZone: -4
+          format: 'YYYY-MM-DD-HH-mm-ss'
       - uses: joutvhu/write-file@v1
         with:
           path: ./fcre-weir-data-action-status.json
-          contents: ${{ env.status }}
+          contents: |
+            ${{ env.status }}
+            
+            
+            ${{ steps.time.outputs.time }}
           write_mode: overwrite
       - name: Commit files
         run: |
