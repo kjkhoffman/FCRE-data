@@ -1,7 +1,7 @@
 name: GitHub Monitor bita-logs
 on:
   schedule:
-    - cron: "0 */1 * * *" #Check every 6 hours
+    - cron: "0 */1 * * *" #Check every hour
 jobs:
   Github-monitoring:
     runs-on: ubuntu-latest
@@ -15,7 +15,7 @@ jobs:
         uses: AlexHolderDeveloper/CommitsWithinTime@v1.1.5
         id: commitswithintime
         with:
-          hours: 1
+          hours: 12
       # Use the output from the `commitswithintime` step
       - name: Get the output from CommitsWithinTime
         run: |
