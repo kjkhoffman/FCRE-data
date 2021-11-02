@@ -2,9 +2,9 @@ name: wvwaw-generate-graphs
 
 # Controls when the action will run.
 on:
-  - workflow_dispatch
-  - schedule:
+  schedule:
     - cron: '00 07 * * *'
+  workflow_dispatch
 
 jobs: 
   generate-graphs:
