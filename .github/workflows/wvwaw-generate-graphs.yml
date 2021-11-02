@@ -1,4 +1,4 @@
-name: fcre-generate-graphs
+name: wvwaw-generate-graphs
 
 # Controls when the action will run.
 on: 
@@ -12,10 +12,10 @@ jobs:
 
     # Load repo and install R
     steps:
-      - name: Checkout with fcre-generate-graphs branch
+      - name: Checkout with wvwaw-generate-graphs branch
         uses: actions/checkout@v2
         with:
-          ref: fcre-generate-graphs
+          ref: wvwaw-generate-graphs
           fetch-depth: 1
 
       - name: Set Up R
@@ -24,7 +24,7 @@ jobs:
         run: |
           R -e 'install.packages("lubridate")'
       - name: Run R Script
-        run: Rscript fcre-generate-graphs.R
+        run: Rscript wvwaw-generate-graphs.R
       
       # Commit files ,and push
       - name: Commit files
@@ -33,6 +33,6 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add WeirDataFigures_$(date '+%Y-%m-%d').pdf MetDataFigures_$(date '+%Y-%m-%d').pdf BVRDataFigures_$(date '+%Y-%m-%d').pdf \
           FCRCatwalkDataFigures_$(date '+%Y-%m-%d').pdf CCRMetDataFigures_$(date '+%Y-%m-%d').pdf CCRWaterQualityDataFigures_$(date '+%Y-%m-%d').pdf
-          git commit -m "fcre-generate-graphs-$(date '+%Y-%m-%d')"
-          git branch fcre-graphs
-          git push --force origin fcre-graphs
+          git commit -m "wvwaw-generate-graphs-$(date '+%Y-%m-%d')"
+          git branch wvwaw-graphs
+          git push --force origin wvwaw-graphs
