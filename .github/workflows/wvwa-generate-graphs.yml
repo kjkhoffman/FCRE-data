@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 1
 
       - name: Set Up R
-        uses: r-lib/actions/setup-@master
+        uses: r-lib/actions/setup-r@master
       - name: Install packages
         run: |
           R -e 'install.packages("lubridate")'
@@ -35,7 +35,7 @@ jobs:
           git add WeirDataFigures_$(date '+%Y-%m-%d').pdf MetDataFigures_$(date '+%Y-%m-%d').pdf BVRDataFigures_$(date '+%Y-%m-%d').pdf \
           FCRCatwalkDataFigures_$(date '+%Y-%m-%d').pdf CCRMetDataFigures_$(date '+%Y-%m-%d').pdf CCRWaterQualityDataFigures_$(date '+%Y-%m-%d').pdf
           git commit -m "wvwa-generate-graphs-$(date '+%Y-%m-%d')"
-          git branch wvwa-graphs
+          git branch wvwa-graph
           git push --force origin wvwa-graphs
       
       - name: Send mail
