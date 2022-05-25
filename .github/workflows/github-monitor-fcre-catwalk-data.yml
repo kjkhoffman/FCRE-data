@@ -1,7 +1,7 @@
 name: GitHub Monitor fcre-catwalk-data
 on:
   schedule:
-    - cron: "30 * * * *" #Check every hour
+    - cron: "20 * * * *" #Check every hour
 jobs:
   Github-monitoring:
     runs-on: ubuntu-latest
