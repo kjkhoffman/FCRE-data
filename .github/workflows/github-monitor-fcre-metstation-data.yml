@@ -1,7 +1,7 @@
 name: GitHub Monitor fcre-metstation-data
 on:
   schedule:
-    - cron: "30 * * * *" #Check every hour
+    - cron: "40 * * * *" #Check every hour
 jobs:
   Github-monitoring:
     runs-on: ubuntu-latest
