@@ -15,7 +15,7 @@ jobs:
         uses: AlexHolderDeveloper/CommitsWithinTime@v1.1.5
         id: commitswithintime
         with:
-          hours: 12 #Max time between updates
+          hours: 24 #Max time between updates
       # Use the output from the `commitswithintime` step
       - name: Get the output from CommitsWithinTime
         run: |
