@@ -19,10 +19,10 @@ jobs:
        - name: Run QAQC script
          run:  | 
            Rscript $GITHUB_WORKSPACE/R/QAQC_workflow.R
-           
-       - name: Commit results 
+       - name: Commit files
          run: |
-           git config --local user.name "$GITHUB_ACTOR"
-           git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
-           git commit fcre-waterquality_L1.csv -m 'Updating QAQC file' || echo "No changes to commit"
-           git push origin || echo "No changes to commit"
+            git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "github-actions[bot]"
+            git add fcre-waterquality_L1.csv
+            git commit -m "Updating QAQC file"
+            git push
