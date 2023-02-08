@@ -1,0 +1,26 @@
+on:
+   workflow_dispatch:
+   schedule:
+   - cron: "0 2 * * *"
+
+ jobs:
+   qaqc_run:
+     runs-on: ubuntu-latest
+     steps:
+       - name: Checkout repo
+         uses: actions/checkout@v3
+         with:
+           ref: fcre-catwalk-data
+           fetch-depth: 1
+
+ # run the QAQC workflow
+       - name: Run QAQC script
+         run:  | 
+           Rscript $GITHUB_WORKSPACE/R/QAQC_workflow.R
+           
+       - name: Commit results 
+         run: |
+           git config --local user.name "$GITHUB_ACTOR"
+           git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
+           git commit fcre-waterquality_L1.csv -m 'Updating QAQC file' || echo "No changes to commit"
+           git push origin || echo "No changes to commit"
