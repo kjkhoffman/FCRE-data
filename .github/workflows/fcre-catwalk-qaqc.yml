@@ -1,7 +1,7 @@
 on:
    workflow_dispatch:
-   #schedule:
-   #- cron: "0 2 * * *"
+   schedule:
+   - cron: "0 2 * * *"
 
 jobs:
   qaqc_run:
@@ -14,15 +14,13 @@ jobs:
          with:
            ref: fcre-catwalk-data
            fetch-depth: 1
-
- # run the QAQC workflow
        - name: Run QAQC script
          run:  | 
            R -e 'install.packages(c("EDIutils","xml2","here"))'
            Rscript $GITHUB_WORKSPACE/R/QAQC_workflow.R
        - name: Commit files
          run: |
-            git config --global --add safe.directory /__w/FCRE-data/FCRE-data
+            git config --global --add safe.directory $GITHUB_WORKSPACE
             git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git config --global user.name "github-actions[bot]"
             git add fcre-waterquality_L1.csv
