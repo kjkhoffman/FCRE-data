@@ -4,7 +4,7 @@ on:
    push:
       branches:
       - 'fcre-catwalk-data'
-      paths: ['**.csv','**.txt']
+      paths: ['CAT_MaintenanceLog.txt','fcre-waterquality.csv']
 
 jobs:
   qaqc_run:
