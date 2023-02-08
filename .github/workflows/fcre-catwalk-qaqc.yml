@@ -25,5 +25,5 @@ jobs:
             git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git config --global user.name "github-actions[bot]"
             git add fcre-waterquality_L1.csv
-            git commit -m "Updating QAQC file"
-            git push
+            git commit -m "Updating QAQC file" || echo "No changes to commit"
+            git push || echo "No changes to commit"
