@@ -22,7 +22,11 @@ jobs:
            Rscript $GITHUB_WORKSPACE/R/QAQC_workflow.R
        - name: Commit files
          run: |
+            pwd
+            ls -a
             cd $GITHUB_WORKSPACE
+            pwd
+            ls -a
             git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git config --local user.name "github-actions[bot]"
             git add fcre-waterquality_L1.csv
