@@ -1,4 +1,4 @@
-name: QAQC catwalk data2
+name: QAQC catwalk data
 on:
    push:
       branches: [ fcre-catwalk-data ]
