@@ -1,11 +1,11 @@
 name: QAQC catwalk data
 on:
-   workflow_dispatch:
    push:
-      branches:
-      - 'fcre-catwalk-data'
+      branches: [ fcre-catwalk-data ]
       #paths: 
       #- 'fcre-waterquality.csv'
+   workflow_dispatch:
+
 
 jobs:
   qaqc_run:
