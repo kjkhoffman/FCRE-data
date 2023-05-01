@@ -27,7 +27,7 @@ jobs:
             git config --global --add safe.directory $GITHUB_WORKSPACE
             git config --local user.name "$GITHUB_ACTOR"
             git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
-            git checkout -b qaqc-data
+            git checkout qaqc-data
             git add fcre-waterquality_L1.csv
             git commit -m "Updating QAQC file" || echo "No changes to commit"
             git push -u origin qaqc-data || echo "No changes to commit"
