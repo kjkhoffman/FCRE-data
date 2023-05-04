@@ -1,35 +1,40 @@
 name: QAQC catwalk data
 on:
-   push:
-      branches: [ fcre-catwalk-data ]
-      #paths: 
-      #- 'fcre-waterquality.csv'
-   workflow_dispatch:
+  push:
+    branches: [ fcre-catwalk-data ]
+    # paths:
+    # - 'fcre-waterquality.csv'
+  workflow_dispatch:
 
 jobs:
   qaqc_run:
-     runs-on: ubuntu-latest
-     container:
-      image: rocker/tidyverse:latest
-     steps:
-       - name: Checkout repo
-         uses: actions/checkout@v3
-         with:
-           ref: fcre-catwalk-data
-           fetch-depth: 1
-       - name: Run QAQC script
-         run:  | 
-           R -e 'install.packages(c("EDIutils","xml2","here"))'
-           Rscript $GITHUB_WORKSPACE/R/QAQC_workflow.R
-       - name: Checkout qaqc-data branch
-         uses: actions/checkout@v3
-         with:
-           ref: qaqc-data
-       - name: Commit files
-         run: |
-            git config --global --add safe.directory $GITHUB_WORKSPACE
-            git config --local user.name "$GITHUB_ACTOR"
-            git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
-            git add fcre-waterquality_L1.csv
-            git commit -m "Updating QAQC file" || echo "No changes to commit"
-            git push -u origin qaqc-data || echo "No changes to commit"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          ref: fcre-catwalk-data
+          fetch-depth: 1
+      - name: Run QAQC script
+        run: |
+          docker pull rocker/tidyverse:latest
+          docker run \
+            --rm \
+            -v "${GITHUB_WORKSPACE}:/workspace" \
+            rocker/tidyverse:latest \
+            /bin/bash -c " \
+              R -e 'install.packages(c(\"EDIutils\", \"xml2\", \"here\"))' && \
+              Rscript /workspace/R/QAQC_workflow.R \
+            "
+      - name: Checkout qaqc-data branch
+        uses: actions/checkout@v3
+        with:
+          ref: qaqc-data
+      - name: Commit files
+        run: |
+          git config --global --add safe.directory $GITHUB_WORKSPACE
+          git config --local user.name "$GITHUB_ACTOR"
+          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git add fcre-waterquality_L1.csv
+          git commit -m "Updating QAQC file" || echo "No changes to commit"
+          git push -u origin qaqc-data || echo "No changes to commit"
