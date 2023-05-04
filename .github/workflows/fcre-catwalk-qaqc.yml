@@ -20,7 +20,9 @@ jobs:
        - name: Run QAQC script
          run:  | 
            R -e 'install.packages(c("EDIutils","xml2","here"))'
-           Rscript $GITHUB_WORKSPACE/R/QAQC_workflow.R
+           Rscript /github/workspace/R/QAQC_workflow.R
+       - name: Copy output file to workspace
+         run: docker cp ${{ github.job }}:/github/workspace/fcre-waterquality_L1.csv ${{ github.workspace }}/fcre-waterquality_L1.csv
        - name: Checkout qaqc-data branch
          uses: actions/checkout@v3
          with:
@@ -30,7 +32,6 @@ jobs:
             git config --global --add safe.directory $GITHUB_WORKSPACE
             git config --local user.name "$GITHUB_ACTOR"
             git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
-            git checkout qaqc-data
             git add fcre-waterquality_L1.csv
             git commit -m "Updating QAQC file" || echo "No changes to commit"
             git push -u origin qaqc-data || echo "No changes to commit"
