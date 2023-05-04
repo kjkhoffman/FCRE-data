@@ -15,21 +15,25 @@ jobs:
         with:
           ref: fcre-catwalk-data
           fetch-depth: 1
-      - name: Run QAQC script
+
+      - name: Setup R environment
+        uses: r-lib/actions/setup-r@v1
+
+      - name: Install R dependencies
         run: |
-          docker pull rocker/tidyverse:latest
-          docker run \
-            --rm \
-            -v "${GITHUB_WORKSPACE}:/workspace" \
-            rocker/tidyverse:latest \
-            /bin/bash -c " \
-              R -e 'install.packages(c(\"EDIutils\", \"xml2\", \"here\"))' && \
-              Rscript /workspace/R/QAQC_workflow.R \
-            "
+          sudo apt-get update
+          sudo apt-get install -y libxml2-dev
+          R -e 'install.packages(c("EDIutils", "xml2", "here"))'
+
+      - name: Run QAQC script
+        run: Rscript R/QAQC_workflow.R
+
       - name: Checkout qaqc-data branch
         uses: actions/checkout@v3
         with:
           ref: qaqc-data
+          clean: false
+
       - name: Commit files
         run: |
           git config --global --add safe.directory $GITHUB_WORKSPACE
@@ -38,4 +42,3 @@ jobs:
           git add fcre-waterquality_L1.csv
           git commit -m "Updating QAQC file" || echo "No changes to commit"
           git push -u origin qaqc-data || echo "No changes to commit"
-          
