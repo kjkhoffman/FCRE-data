@@ -11,6 +11,7 @@ jobs:
      runs-on: ubuntu-latest
      container:
       image: rocker/tidyverse:latest
+      working-directory: /github/workspace
      steps:
        - name: Checkout repo
          uses: actions/checkout@v3
@@ -20,9 +21,7 @@ jobs:
        - name: Run QAQC script
          run:  | 
            R -e 'install.packages(c("EDIutils","xml2","here"))'
-           Rscript /github/workspace/R/QAQC_workflow.R
-       - name: Copy output file to workspace
-         run: docker cp ${{ github.job }}:/github/workspace/fcre-waterquality_L1.csv ${{ github.workspace }}/fcre-waterquality_L1.csv
+           Rscript R/QAQC_workflow.R
        - name: Checkout qaqc-data branch
          uses: actions/checkout@v3
          with:
