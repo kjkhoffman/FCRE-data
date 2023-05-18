@@ -1,4 +1,4 @@
-# [FCRE-data]
+# FCRE-data
 
 ## Overview
 [Provide a brief description of your project here]
