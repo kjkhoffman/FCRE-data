@@ -33,4 +33,4 @@ jobs:
          run: |
             git add FCRWeir_L1.csv
             git commit -m "Updating QAQC files" || echo "No changes to commit"
-            git push origin ccre-dam-data-qaqc || echo "No changes to commit"
+            git push || echo "No changes to commit"
