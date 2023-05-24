@@ -19,7 +19,7 @@ jobs:
            fetch-depth: 1
        - name: Download necessary files
          run: |
-            wget https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/fcre-waterquality.csv
+            wget -N https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-catwalk-data/fcre-waterquality.csv
        - name: Run QAQC script
          run: | 
            R -e 'install.packages(c("EDIutils","xml2","here","suncalc"))'
