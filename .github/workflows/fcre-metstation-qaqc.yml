@@ -19,7 +19,7 @@ jobs:
            fetch-depth: 1
        - name: Download necessary files
          run: |
-            wget -O FCRmet.csv -F https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet.csv
+            wget -N https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet.csv
        - name: Run QAQC script
          run: | 
            R -e 'install.packages(c("EDIutils","xml2","here","suncalc"))'
