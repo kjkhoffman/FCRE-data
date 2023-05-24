@@ -6,7 +6,6 @@ on:
       #- 'FCRmet.csv'
    workflow_dispatch:
 
-
 jobs:
   qaqc_run:
      runs-on: ubuntu-latest
@@ -16,17 +15,22 @@ jobs:
        - name: Checkout repo
          uses: actions/checkout@v3
          with:
-           ref: fcre-metstation-data
+           ref: fcre-metstation-data-qaqc
            fetch-depth: 1
+       - name: Download necessary files
+         run: |
+            wget https://raw.githubusercontent.com/FLARE-forecast/FCRE-data/fcre-metstation-data/FCRmet.csv
        - name: Run QAQC script
-         run:  | 
+         run: | 
            R -e 'install.packages(c("EDIutils","xml2","here","suncalc"))'
            Rscript $GITHUB_WORKSPACE/R/QAQC_workflow.R
-       - name: Commit files
+       - name: Configure Git
          run: |
-            git config --global --add safe.directory $GITHUB_WORKSPACE
+            git config --global --add safe.directory "$GITHUB_WORKSPACE"
             git config --local user.name "$GITHUB_ACTOR"
             git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
+       - name: Commit files
+         run: |
             git add FCRmet_L1.csv
-            git commit -m "Updating QAQC file" || echo "No changes to commit"
-            git push origin -u qaqc-data || echo "No changes to commit"
+            git commit -m "Updating QAQC files" || echo "No changes to commit"
+            git push origin ccre-dam-data-qaqc || echo "No changes to commit"
