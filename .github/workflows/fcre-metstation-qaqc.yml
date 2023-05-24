@@ -10,7 +10,7 @@ jobs:
   qaqc_run:
      runs-on: ubuntu-latest
      container:
-      image: rocker/tidyverse:latest
+      image: rocker/tidyverse:4.2
      steps:
        - name: Checkout repo
          uses: actions/checkout@v3
