@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         max-retries: [5]  # Number of retries
-        retry-delay-seconds: [60, 300, 1800, 7200]  # Delays between retries in seconds
+        retry-delay-seconds: [15, 60, 300, 1800, 7200]  # Delays between retries in seconds
 
     # Load repo and install R
     steps:
