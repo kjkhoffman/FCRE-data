@@ -3,13 +3,24 @@ name: wvwa-generate-graphs
 # Controls when the action will run.
 on:
   schedule:
-    - cron: '00 05,07 * * *'
+    - cron: '00 05 * * *'
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Generate Graphs"]  # Replace with your actual workflow name
+    types:
+      - completed
 
 jobs: 
   generate-graphs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+
+    # Specify retry settings with delays
+    strategy:
+      fail-fast: false
+      matrix:
+        max-retries: [5]  # Number of retries
+        retry-delay-seconds: [60, 300, 1800, 7200]  # Delays between retries in seconds
 
     # Load repo and install R
     steps:
@@ -38,8 +49,12 @@ jobs:
           git branch wvwa-graphs
           git push --force origin wvwa-graphs
       
+  send-mail:
+    needs: generate-graphs
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Send mail
-        if: ${{ failure() }}
         uses: dawidd6/action-send-mail@v2
         with:
           # mail server settings
