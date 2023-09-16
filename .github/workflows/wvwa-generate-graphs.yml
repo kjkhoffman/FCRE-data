@@ -3,7 +3,7 @@ name: wvwa-generate-graphs
 # Controls when the action will run.
 on:
   schedule:
-    - cron: '00 05 * * *'
+    - cron: '00 06 * * *'
   workflow_dispatch:
   workflow_run:
     workflows: ["Generate Graphs"]  # Replace with your actual workflow name
@@ -19,8 +19,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        max-retries: [5]  # Number of retries
-        retry-delay-seconds: [15, 60, 300, 1800, 7200]  # Delays between retries in seconds
+        max-retries: [3]  # Number of retries
+        retry-delay-seconds: [300, 1800, 7200]  # Delays between retries in seconds
 
     # Load repo and install R
     steps:
