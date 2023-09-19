@@ -48,7 +48,8 @@ jobs:
           git commit -m "wvwa-generate-graphs-$(date '+%Y-%m-%d')"
           git branch wvwa-graphs
           git push --force origin wvwa-graphs
-      
+
+  # Check action status. If failure, send email to notify administrators
   send-mail:
     needs: generate-graphs
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
