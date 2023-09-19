@@ -16,11 +16,10 @@ jobs:
 
     # retry settings
     strategy:
-      fail-fast: false
-      if: ${{ failure() }}  
-      matrix:
+      matrix:        
         max-retries: 3
         retry-delay-seconds: [300, 1800, 7200]
+      if: ${{ failure() }}
 
     # Load repo and install R
     steps:
