@@ -6,7 +6,7 @@ on:
     - cron: '00 06 * * *'
   workflow_dispatch:
   workflow_run:
-    workflows: ["Generate Graphs"]  # Replace with your actual workflow name
+    workflows: ["Generate Graphs"]
     types:
       - completed
 
