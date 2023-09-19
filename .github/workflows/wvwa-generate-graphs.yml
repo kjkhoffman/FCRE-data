@@ -15,10 +15,12 @@ jobs:
     runs-on: ubuntu-latest
 
     # retry settings
-    if: ${{ failure() }} 
     strategy:
-      max-retries: 3
-      retry-delay-seconds: [300, 1800, 7200]
+      fail-fast: false
+      if: ${{ failure() }}  
+      matrix:
+        max-retries: 3
+        retry-delay-seconds: [300, 1800, 7200]
 
     # Load repo and install R
     steps:
