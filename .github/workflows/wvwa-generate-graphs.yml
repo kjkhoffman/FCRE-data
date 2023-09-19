@@ -13,14 +13,12 @@ on:
 jobs: 
   generate-graphs:
     runs-on: ubuntu-latest
-
-    # retry settings
+    
+    # Wrap the job in a strategy matrix for retries
     strategy:
-      fail-fast: false
       matrix:
-        max-retries: [3]
-        retry-delay-seconds: [300, 1800, 7200]
-
+        max-retries: [0, 1, 2]  # Adjust the number of retries as needed
+      
     # Load repo and install R
     steps:
       - name: Checkout with wvwa-generate-graphs branch
@@ -47,7 +45,7 @@ jobs:
           git commit -m "wvwa-generate-graphs-$(date '+%Y-%m-%d')"
           git branch wvwa-graphs
           git push --force origin wvwa-graphs
-
+        
   # Check action status. If failure, send email to notify administrators
   send-mail:
     needs: generate-graphs
