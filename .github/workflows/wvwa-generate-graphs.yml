@@ -13,38 +13,26 @@ jobs:
   generate-graphs:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout main repository
+        uses: actions/checkout@v2
+
       - name: Retry wrapper
         uses: nick-invision/retry@v2
         with:
           timeout_minutes: 10
           max_attempts: 3
-          retry_on: error # can be "error" or "failure"
+          retry_on: error
           command: |
-            echo "Executing the generate-graphs job with retry logic..."
-            - name: Checkout with wvwa-generate-graphs branch
-              uses: actions/checkout@v2
-              with:
-                ref: wvwa-generate-graphs
-                fetch-depth: 1
-
-            - name: Set Up R
-              uses: r-lib/actions/setup-r@v2
-
-            - name: Install packages
-              run: R -e 'install.packages("lubridate")'
-
-            - name: Run R Script
-              run: Rscript wvwa-generate-graphs.R
-
-            - name: Commit files
-              run: |
-                git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-                git config --local user.name "github-actions[bot]"
-                git add WeirDataFigures_$(date '+%Y-%m-%d').pdf MetDataFigures_$(date '+%Y-%m-%d').pdf BVRDataFigures_$(date '+%Y-%m-%d').pdf \
-                FCRCatwalkDataFigures_$(date '+%Y-%m-%d').pdf CCRMetDataFigures_$(date '+%Y-%m-%d').pdf CCRWaterQualityDataFigures_$(date '+%Y-%m-%d').pdf
-                git commit -m "wvwa-generate-graphs-$(date '+%Y-%m-%d')"
-                git branch wvwa-graphs
-                git push --force origin wvwa-graphs
+            git clone --branch wvwa-generate-graphs https://github.com/FLARE-forecast/FCRE-data.git
+            R -e 'install.packages("lubridate")'
+            Rscript wvwa-generate-graphs.R
+            git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "github-actions[bot]"
+            git add WeirDataFigures_$(date '+%Y-%m-%d').pdf MetDataFigures_$(date '+%Y-%m-%d').pdf BVRDataFigures_$(date '+%Y-%m-%d').pdf \
+            FCRCatwalkDataFigures_$(date '+%Y-%m-%d').pdf CCRMetDataFigures_$(date '+%Y-%m-%d').pdf CCRWaterQualityDataFigures_$(date '+%Y-%m-%d').pdf
+            git commit -m "wvwa-generate-graphs-$(date '+%Y-%m-%d')"
+            git branch wvwa-graphs
+            git push --force origin wvwa-graphs
 
   send-mail:
     needs: generate-graphs
