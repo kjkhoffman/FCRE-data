@@ -21,7 +21,6 @@ jobs:
           retry_on: error # can be "error" or "failure"
           command: |
             echo "Executing the generate-graphs job with retry logic..."
-            # Here, embed your original job details
             - name: Checkout with wvwa-generate-graphs branch
               uses: actions/checkout@v2
               with:
@@ -32,13 +31,11 @@ jobs:
               uses: r-lib/actions/setup-r@v2
 
             - name: Install packages
-              run: |
-                R -e 'install.packages("lubridate")'
+              run: R -e 'install.packages("lubridate")'
 
             - name: Run R Script
               run: Rscript wvwa-generate-graphs.R
-      
-            # Commit and push files
+
             - name: Commit files
               run: |
                 git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
