@@ -20,10 +20,34 @@ jobs:
           max_attempts: 3
           retry_on: error # can be "error" or "failure"
           command: |
-            git clone --branch wvwa-generate-graphs [Your Repo URL]
-            R -e 'install.packages("lubridate")'
-            Rscript wvwa-generate-graphs.R
-            # ... your other steps for commit and push ...
+            echo "Executing the generate-graphs job with retry logic..."
+            # Here, embed your original job details
+            - name: Checkout with wvwa-generate-graphs branch
+              uses: actions/checkout@v2
+              with:
+                ref: wvwa-generate-graphs
+                fetch-depth: 1
+
+            - name: Set Up R
+              uses: r-lib/actions/setup-r@v2
+
+            - name: Install packages
+              run: |
+                R -e 'install.packages("lubridate")'
+
+            - name: Run R Script
+              run: Rscript wvwa-generate-graphs.R
+      
+            # Commit and push files
+            - name: Commit files
+              run: |
+                git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                git config --local user.name "github-actions[bot]"
+                git add WeirDataFigures_$(date '+%Y-%m-%d').pdf MetDataFigures_$(date '+%Y-%m-%d').pdf BVRDataFigures_$(date '+%Y-%m-%d').pdf \
+                FCRCatwalkDataFigures_$(date '+%Y-%m-%d').pdf CCRMetDataFigures_$(date '+%Y-%m-%d').pdf CCRWaterQualityDataFigures_$(date '+%Y-%m-%d').pdf
+                git commit -m "wvwa-generate-graphs-$(date '+%Y-%m-%d')"
+                git branch wvwa-graphs
+                git push --force origin wvwa-graphs
 
   send-mail:
     needs: generate-graphs
