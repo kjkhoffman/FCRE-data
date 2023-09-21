@@ -23,7 +23,7 @@ jobs:
           max_attempts: 3
           retry_on: error
           command: |
-            git clone --branch wvwa-generate-graphs https://github.com/FLARE-forecast/FCRE-data.git
+            git clone --single-branch --depth 1 --branch wvwa-generate-graphs https://github.com/FLARE-forecast/FCRE-data.git
             R -e 'install.packages("lubridate")'
             Rscript wvwa-generate-graphs.R
             git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
