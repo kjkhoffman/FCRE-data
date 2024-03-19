@@ -38,6 +38,7 @@ jobs:
           R -e 'install.packages("gridExtra")'
           R -e 'install.packages("openair")'
           R -e 'install.packages("tidyverse")'
+          R -e 'install.packages("ggplot")'
       - name: Run R Script
         run: Rscript wvwa-generate-graphs.R
       
