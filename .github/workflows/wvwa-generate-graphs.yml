@@ -37,6 +37,7 @@ jobs:
           R -e 'install.packages("lubridate")'
           R -e 'install.packages("gridExtra")'
           R -e 'install.packages("openair")'
+          R -e 'install.packages("tidyverse")'
       - name: Run R Script
         run: Rscript wvwa-generate-graphs.R
       
