@@ -35,6 +35,8 @@ jobs:
       - name: Install packages
         run: |
           R -e 'install.packages("lubridate")'
+          R -e 'install.packages("gridExtra")'
+          R -e 'install.packages("openair")'
       - name: Run R Script
         run: Rscript wvwa-generate-graphs.R
       
@@ -44,7 +46,8 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add WeirDataFigures_$(date '+%Y-%m-%d').pdf MetDataFigures_$(date '+%Y-%m-%d').pdf BVRDataFigures_$(date '+%Y-%m-%d').pdf \
-          FCRCatwalkDataFigures_$(date '+%Y-%m-%d').pdf CCRMetDataFigures_$(date '+%Y-%m-%d').pdf CCRWaterQualityDataFigures_$(date '+%Y-%m-%d').pdf
+          FCRCatwalkDataFigures_$(date '+%Y-%m-%d').pdf CCRMetDataFigures_$(date '+%Y-%m-%d').pdf CCRWaterQualityDataFigures_$(date '+%Y-%m-%d').pdf \
+          EddyFluxDataFigures_$(date '+%Y-%m-%d').pdf
           git commit -m "wvwa-generate-graphs-$(date '+%Y-%m-%d')"
           git branch wvwa-graphs
           git push --force origin wvwa-graphs
